@@ -1,0 +1,7 @@
+DeOldify/deoldenv
+diffusion/diffenv
+styleTransfer/styleenv
+superResolution/fastml
+
+superResolution/src/models/RRDB_ESRGAN_x4.pth
+DeOldify/src/models/ColorizeArtistic_gen.pth

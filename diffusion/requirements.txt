@@ -1,0 +1,12 @@
+uvicorn
+gunicorn
+glob2
+opencv-python-headless
+numpy
+torch 
+diffusers
+transformers
+fastapi
+sockets
+pydantic
+python-multipart
