@@ -15,7 +15,7 @@ then build the docker image by running the following command:
 docker build -t superres .
    - this will build the docker image
 
-to run the docker image, run the following command:
+to create container from image, run the following command:
 
 docker run -p 8000:8000 --name superres-api superres
 
