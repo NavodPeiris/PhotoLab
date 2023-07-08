@@ -1,22 +1,35 @@
 # PhotoLab
-This is Cloud Computing project 2
+This is Cloud Computing project 2 which is a mobile app that can perform
+   - image super resolution
+   - image colorization
+   - style transfer
+   - image generation
+
+mobile applications upload the images and text to services running on AWS Cloud. In AWS cloud we are running 4 ECS clusters with autoscaling for each service.
 
 app directory contain Flutter app.
 
-other 4 directories are inference APIs that should be hosted on AWS
+other 4 directories are inference APIs that should be hosted on AWS ECS clusters
 
-go to superResolution/src and run the following command:
+1. cd into app directory and run **flutter pub get** to install dependencies.
 
-pip install -r requirements.txt
-   - this will install the required packages
+2. connect a android device and run **flutter run android** to build app in device.
 
-then build the docker image by running the following command:
+3. cd into superResolution and run the following commands:
 
-docker build -t superres .
-   - this will build the docker image
+   **python -m venv diffenv**
+      - this will make the virtual environment inside the directory
 
-to create container from image, run the following command:
+   **pip install -r requirements.txt**
+      - this will install the required packages
 
-docker run -p 8000:8000 --name superres-api superres
+4. then build the docker image by running the following command:**
+
+   **docker build -t superres .**
+      - this will build the docker image
+
+5. to create container from image, run the following command:
+
+   **docker run -p 8000:8000 --name superres-api superres**
 
 
