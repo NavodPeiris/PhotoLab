@@ -17,11 +17,11 @@ hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
 print("ip_address : ", ip_address)
 
-@app.get('/health')
+@app.get('/superRes/health')
 async def hi():
     return {"response": "server running"}
 
-@app.post('/superRes')
+@app.post('/superRes/infer')
 async def superRes(file: UploadFile = File(...)):
 
     source_folder = 'LR/*'

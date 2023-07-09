@@ -19,7 +19,7 @@ class Deoldify extends StatefulWidget {
 
 class _DeoldifyState extends State<Deoldify> {
   File? _imageFile;
-  final uploadUrl = Uri.parse('http://192.168.8.141:8000/deoldify');
+  final uploadUrl = Uri.parse('http://192.168.8.141:8000/deoldify/infer');
   String? _imageUrl;
   late bool _uploading;
   late int frameNum;

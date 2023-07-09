@@ -20,7 +20,7 @@ class StyleTransfer extends StatefulWidget {
 class _StyleTransferState extends State<StyleTransfer> {
   File? _contentImage;
   File? _styleImage;
-  final uploadUrl = Uri.parse('http://192.168.8.141:8000/styleTransfer');
+  final uploadUrl = Uri.parse('http://192.168.8.141:8000/styleTransfer/infer');
   String? _imageUrl;
   late bool _uploading;
   late int frameNum;

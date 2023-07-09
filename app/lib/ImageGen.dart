@@ -24,7 +24,7 @@ class _ImageGenState extends State<ImageGen> {
 
   final TextEditingController promptController = TextEditingController();
   String? prompt;
-  final uploadUrl = Uri.parse('http://192.168.8.141:8000/imageGen');
+  final uploadUrl = Uri.parse('http://192.168.8.141:8000/diffusion/infer');
   String? _imageUrl;
   late bool _uploading;
   late int frameNum;

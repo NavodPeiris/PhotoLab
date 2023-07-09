@@ -29,11 +29,11 @@ hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
 print("ip_address : ", ip_address)
 
-@app.get('/health')
+@app.get('/diffusion/health')
 async def hi():
     return {"response": "server running"}
 
-@app.post('/imageGen')
+@app.post('/diffusion/infer')
 async def imageGen(request: Request, prompt: Prompt):
 
     out_path = 'result_images/*'

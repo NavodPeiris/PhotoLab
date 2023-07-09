@@ -19,7 +19,7 @@ class SuperRes extends StatefulWidget {
 
 class _SuperResState extends State<SuperRes> {
   File? _imageFile;
-  final uploadUrl = Uri.parse('http://192.168.8.141:8000/superRes');
+  final uploadUrl = Uri.parse('http://192.168.8.141:8000/superRes/infer');
   String? _imageUrl;
   late bool _uploading;
   late int frameNum;

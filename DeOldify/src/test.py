@@ -25,11 +25,11 @@ hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
 print("ip_address : ", ip_address)
 
-@app.get('/health')
+@app.get('/deoldify/health')
 async def hi():
     return {"response": "server running"}
 
-@app.post('/deoldify')
+@app.post('/deoldify/infer')
 async def deoldify(file: UploadFile = File(...)):
 
     source_folder = 'source_images/*'

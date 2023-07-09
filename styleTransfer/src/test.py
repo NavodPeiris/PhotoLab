@@ -27,11 +27,11 @@ hostname = socket.gethostname()
 ip_address = socket.gethostbyname(hostname)
 print("ip_address : ", ip_address)
 
-@app.get('/health')
+@app.get('/styleTransfer/health')
 async def hi():
     return {"response": "server running"}
 
-@app.post('/styleTransfer')
+@app.post('/styleTransfer/infer')
 async def styleTransfer(file1: UploadFile = File(...), file2: UploadFile = File(...)):
 
     # file1 is content image
