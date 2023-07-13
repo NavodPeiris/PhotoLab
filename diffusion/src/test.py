@@ -1,12 +1,18 @@
 import torch
 from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 
-model_id = "stabilityai/stable-diffusion-2-1"
+from torch import autocast
 
-# Use the DPMSolverMultistepScheduler (DPM-Solver++) scheduler here instead
-pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
-pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-pipe = pipe.to("cpu")
+pipe = StableDiffusionPipeline.from_pretrained(
+	"CompVis/stable-diffusion-v1-4", 
+	use_auth_token="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"
+).to("cpu")
+
+prompt = "a photo of an astronaut riding a horse on mars"
+with autocast("cpu"):
+    image = pipe(prompt)["sample"][0]  
+    
+image.save("astronaut_rides_horse.png")
 
 from fastapi import FastAPI, Request
 import shutil
