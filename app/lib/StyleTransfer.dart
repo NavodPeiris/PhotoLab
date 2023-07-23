@@ -142,6 +142,7 @@ class _StyleTransferState extends State<StyleTransfer> {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
+          tileColor: Color(0xffca485c),
           title: Text('Style Transfer'),
           onTap: () {
             showDialog(

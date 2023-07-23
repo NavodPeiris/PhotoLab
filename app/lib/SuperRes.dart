@@ -135,6 +135,7 @@ class _SuperResState extends State<SuperRes> {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
+          tileColor: Color(0xffca485c),
           title: Text('Super Resolution'),
           onTap: () {
             showDialog(

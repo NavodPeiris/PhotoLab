@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1086367101180",
+    "project_id": "photolab-ee4b4",
+    "storage_bucket": "photolab-ee4b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086367101180:android:3467b1331b1212f495a779",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086367101180-fgmobbnagkt117g9g7ij3m6nmo6l42ar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZf_nCeiwUl692PMD69rZhzYD36i6zAcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086367101180-fgmobbnagkt117g9g7ij3m6nmo6l42ar.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

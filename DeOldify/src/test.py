@@ -2,7 +2,7 @@
 from deoldify import device
 from deoldify.device_id import DeviceId
 #choices:  CPU, GPU0...GPU7
-device.set(device=DeviceId.CPU)
+device.set(device=DeviceId.GPU0)
 
 from deoldify.visualize import *
 plt.style.use('dark_background')

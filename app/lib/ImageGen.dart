@@ -147,6 +147,7 @@ class _ImageGenState extends State<ImageGen> {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
+          tileColor: Color(0xffca485c),
           title: Text('Image Generation'),
           onTap: () {
             showDialog(

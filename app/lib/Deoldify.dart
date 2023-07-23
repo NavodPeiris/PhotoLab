@@ -135,6 +135,7 @@ class _DeoldifyState extends State<Deoldify> {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
+          tileColor: Color(0xffca485c),
           title: Text('DeOldify Image'),
           onTap: () {
             showDialog(

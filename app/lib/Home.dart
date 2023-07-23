@@ -16,6 +16,7 @@ import './SuperRes.dart';
 import './Deoldify.dart';
 import './StyleTransfer.dart';
 import './ImageGen.dart';
+import './account.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -28,10 +29,15 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xffca485c),
         title: Center(
           child: Text('PhotoLab'),
         ),
+        actions: [
+          Account(),
+        ],
       ),
+      backgroundColor: Colors.black,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
