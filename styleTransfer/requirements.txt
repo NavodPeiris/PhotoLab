@@ -9,3 +9,4 @@ matplotlib
 fastapi
 sockets
 python-multipart
+accelerate

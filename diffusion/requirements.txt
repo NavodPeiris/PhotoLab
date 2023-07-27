@@ -10,3 +10,4 @@ fastapi
 sockets
 pydantic
 python-multipart
+accelerate

@@ -3,18 +3,12 @@ from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 
 from torch import autocast
 
-device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+device = "cuda"
 
 pipe = StableDiffusionPipeline.from_pretrained(
 	"CompVis/stable-diffusion-v1-4", 
 	use_auth_token="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"
 ).to(device)
-
-prompt = "a photo of an astronaut riding a horse on mars"
-with autocast(device):
-    image = pipe(prompt)["sample"][0]  
-    
-image.save("astronaut_rides_horse.png")
 
 from fastapi import FastAPI, Request
 import shutil
@@ -55,8 +49,8 @@ async def imageGen(request: Request, prompt: Prompt):
 
     prompt_text = prompt.prompt
 
-    with autocast(device): 
-        image = pipe(prompt_text, guidance_scale=8.5)["sample"][0]
+    with autocast(device):
+        image = pipe(prompt).images[0]
 
     # Save the image with the given prompt as the filename
     image_path = os.path.join(folder_path, f'{prompt_text}.png')
