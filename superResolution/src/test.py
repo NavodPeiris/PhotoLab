@@ -46,7 +46,7 @@ async def superRes(file: UploadFile = File(...)):
         print("image written")
 
     model_path = 'models/RRDB_ESRGAN_x4.pth'  # models/RRDB_ESRGAN_x4.pth OR models/RRDB_PSNR_x4.pth
-    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = "cuda"
 
     model = arch.RRDBNet(3, 3, 64, 23, gc=32)
     model.load_state_dict(torch.load(model_path), strict=True)

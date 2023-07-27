@@ -9,3 +9,4 @@ torchaudio
 fastapi
 sockets
 python-multipart
+accelerate
