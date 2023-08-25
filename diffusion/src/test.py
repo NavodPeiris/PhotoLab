@@ -1,25 +1,14 @@
+from diffusers import StableDiffusionPipeline
 import torch
-from diffusers import StableDiffusionPipeline, DPMSolverMultistepScheduler
 
-from torch import autocast
-
-device = "cuda"
-
-pipe = StableDiffusionPipeline.from_pretrained(
-	"CompVis/stable-diffusion-v1-4", 
-	use_auth_token="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"
-).to(device)
+model_id = "runwayml/stable-diffusion-v1-5"
+pipe = StableDiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float32)
 
 from fastapi import FastAPI, Request
-import shutil
 import os
 from fastapi.responses import FileResponse
 import socket
 from pydantic import BaseModel
-
-import os
-from fastapi import FastAPI
-from PIL import Image
 import glob
 
 app = FastAPI()
@@ -49,8 +38,7 @@ async def imageGen(request: Request, prompt: Prompt):
 
     prompt_text = prompt.prompt
 
-    with autocast(device):
-        image = pipe(prompt).images[0]
+    image = pipe(prompt_text).images[0]
 
     # Save the image with the given prompt as the filename
     image_path = os.path.join(folder_path, f'{prompt_text}.png')
