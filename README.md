@@ -5,7 +5,7 @@ This is Cloud Computing project 2 which is a mobile app that can perform
    - style transfer
    - image generation
 
-mobile applications upload the images and text to services running on AWS Cloud. In AWS cloud we are running 4 ECS clusters with autoscaling for each service.
+mobile application upload the images and text to services running on AWS Cloud. In AWS cloud we are running an ECS cluster with autoscaling for each service.
 
 app directory contain Flutter app.
 
