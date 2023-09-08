@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
+import './MyCard.dart';
 import 'photoUtil.dart';
 
 class Deoldify extends StatefulWidget {
@@ -26,6 +26,11 @@ class _DeoldifyState extends State<Deoldify> {
   PhotoUtil photoUtil = new PhotoUtil();
 
   late Uint8List _imageBytes;
+
+  MyCard card = new MyCard(
+    imagePath: "assets/images/colorize.jpg", 
+    text: "colorize a black and white image"
+  );
 
   @override
   void initState() {
@@ -133,10 +138,9 @@ class _DeoldifyState extends State<Deoldify> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: ListTile(
-          tileColor: Color(0xffca485c),
-          title: Text('DeOldify Image'),
+    return Center(
+        child: GestureDetector(
+          child: card,
           onTap: () {
             showDialog(
               context: context,
@@ -208,7 +212,7 @@ class _DeoldifyState extends State<Deoldify> {
                 );
               },
             );
-          },
+          }
         ),
       );
   }

@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
+import './MyCard.dart';
 import 'photoUtil.dart';
 
 class SuperRes extends StatefulWidget {
@@ -24,6 +24,11 @@ class _SuperResState extends State<SuperRes> {
   late bool _uploading;
   late int frameNum;
   PhotoUtil photoUtil = new PhotoUtil();
+
+  MyCard card = new MyCard(
+    imagePath: "assets/images/super.jpeg", 
+    text: "increase the resolution of image without losing quality"
+  );
 
   late Uint8List _imageBytes;
 
@@ -55,13 +60,28 @@ class _SuperResState extends State<SuperRes> {
         });
         frameNum++;
         photoUtil.saveImageFileToDirectory(_imageBytes, 'image_$frameNum.jpg');
-        print('Image uploaded successfully');
         _showImagePopup(context);
       } else {
         print('Image upload failed');
+        Fluttertoast.showToast(
+        msg: "error",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
       }
     } catch (e) {
       print('Error uploading image: $e');
+      Fluttertoast.showToast(
+        msg: "error",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
     } 
   }
 
@@ -123,7 +143,7 @@ class _SuperResState extends State<SuperRes> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Color.fromARGB(255, 43, 207, 17),
         textColor: Colors.white,
         fontSize: 16.0);
     }
@@ -133,10 +153,10 @@ class _SuperResState extends State<SuperRes> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: ListTile(
-          tileColor: Color(0xffca485c),
-          title: Text('Super Resolution'),
+    return 
+      Center(
+        child: GestureDetector(
+          child: card,
           onTap: () {
             showDialog(
               context: context,
@@ -208,7 +228,7 @@ class _SuperResState extends State<SuperRes> {
                 );
               },
             );
-          },
+          }
         ),
       );
   }

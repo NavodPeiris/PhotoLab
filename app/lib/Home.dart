@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xffca485c),
+        backgroundColor: Colors.purple[200],
         title: Center(
           child: Text('PhotoLab'),
         ),
@@ -37,11 +37,12 @@ class _HomeState extends State<Home> {
           Account(),
         ],
       ),
-      backgroundColor: Colors.black,
-      body: Center(
+      backgroundColor: Colors.grey[100],
+      body: SingleChildScrollView( 
+        padding: EdgeInsets.all(16.0), 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: [
             SuperRes(),
             Deoldify(),
             StyleTransfer(),

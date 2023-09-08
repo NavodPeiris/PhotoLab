@@ -12,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
+import './MyCard.dart';
 import 'photoUtil.dart';
 
 class ImageGen extends StatefulWidget {
@@ -29,6 +29,11 @@ class _ImageGenState extends State<ImageGen> {
   late bool _uploading;
   late int frameNum;
   PhotoUtil photoUtil = new PhotoUtil();
+
+  MyCard card = new MyCard(
+    imagePath: "assets/images/diffusion.png", 
+    text: "generate an image from text"
+  );
 
   late Uint8List _imageBytes;
 
@@ -145,10 +150,10 @@ class _ImageGenState extends State<ImageGen> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: ListTile(
-          tileColor: Color(0xffca485c),
-          title: Text('Image Generation'),
+    return 
+      Center(
+        child: GestureDetector(
+          child: card,
           onTap: () {
             showDialog(
               context: context,
@@ -216,7 +221,7 @@ class _ImageGenState extends State<ImageGen> {
                 );
               },
             );
-          },
+          }
         ),
       );
   }

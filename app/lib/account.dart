@@ -44,7 +44,7 @@ class _AccountState extends State<Account> {
               padding: const EdgeInsets.symmetric(vertical: 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
-                color: Color(0xffca485c),
+                color: Colors.purple[200],
               ),
               elevation: 8,
               offset: const Offset(0, 8),

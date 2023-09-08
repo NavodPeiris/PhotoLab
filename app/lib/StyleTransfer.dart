@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
+import './MyCard.dart';
 import 'photoUtil.dart';
 
 class StyleTransfer extends StatefulWidget {
@@ -27,6 +27,11 @@ class _StyleTransferState extends State<StyleTransfer> {
   PhotoUtil photoUtil = new PhotoUtil();
 
   late Uint8List _imageBytes;
+
+  MyCard card = new MyCard(
+    imagePath: "assets/images/style.png", 
+    text: "transfer style from one image to another"
+  );
 
   @override
   void initState() {
@@ -140,10 +145,10 @@ class _StyleTransferState extends State<StyleTransfer> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: ListTile(
-          tileColor: Color(0xffca485c),
-          title: Text('Style Transfer'),
+    return 
+      Center(
+        child: GestureDetector(
+          child: card,
           onTap: () {
             showDialog(
               context: context,
@@ -247,7 +252,7 @@ class _StyleTransferState extends State<StyleTransfer> {
                 );
               },
             );
-          },
+          }
         ),
       );
   }
