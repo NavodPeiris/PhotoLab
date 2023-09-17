@@ -14,6 +14,7 @@ import 'dart:convert';
 
 import './MyCard.dart';
 import 'photoUtil.dart';
+import 'package:wakelock/wakelock.dart';
 
 class ImageGen extends StatefulWidget {
   @override
@@ -75,9 +76,25 @@ class _ImageGenState extends State<ImageGen> {
       _showImagePopup(context);
     } else {
       print('Image upload failed');
+      Fluttertoast.showToast(
+        msg: "error",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
     }
   } catch (e) {
     print('Error uploading image: $e');
+    Fluttertoast.showToast(
+        msg: "error",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }
 
@@ -140,7 +157,7 @@ class _ImageGenState extends State<ImageGen> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Color.fromARGB(255, 43, 207, 17),
         textColor: Colors.white,
         fontSize: 16.0);
     }
@@ -191,7 +208,9 @@ class _ImageGenState extends State<ImageGen> {
                                     _uploading = true;
                                   });
 
+                                  Wakelock.enable();
                                   await _uploadText(context);
+                                  Wakelock.disable();
 
                                   setState(() {
                                     _uploading = false;

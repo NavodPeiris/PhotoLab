@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import './MyCard.dart';
 import 'photoUtil.dart';
+import 'package:wakelock/wakelock.dart';
 
 class StyleTransfer extends StatefulWidget {
   @override
@@ -71,9 +72,25 @@ class _StyleTransferState extends State<StyleTransfer> {
         _showImagePopup(context);
       } else {
         print('Image upload failed');
+        Fluttertoast.showToast(
+        msg: "error",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
       }
     } catch (e) {
       print('Error uploading image: $e');
+      Fluttertoast.showToast(
+        msg: "error",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
     } 
   }
 
@@ -135,7 +152,7 @@ class _StyleTransferState extends State<StyleTransfer> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Color.fromARGB(255, 43, 207, 17),
         textColor: Colors.white,
         fontSize: 16.0);
     }
@@ -221,7 +238,9 @@ class _StyleTransferState extends State<StyleTransfer> {
                                     _uploading = true;
                                   });
 
+                                  Wakelock.enable();
                                   await _uploadImage(context);
+                                  Wakelock.disable;
 
                                   setState(() {
                                     _uploading = false;

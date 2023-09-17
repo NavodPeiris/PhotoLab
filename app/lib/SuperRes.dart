@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import './MyCard.dart';
 import 'photoUtil.dart';
+import 'package:wakelock/wakelock.dart';
 
 class SuperRes extends StatefulWidget {
   @override
@@ -198,7 +199,9 @@ class _SuperResState extends State<SuperRes> {
                                     _uploading = true;
                                   });
 
+                                  Wakelock.enable();
                                   await _uploadImage(context);
+                                  Wakelock.disable;
 
                                   setState(() {
                                     _uploading = false;
