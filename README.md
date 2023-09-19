@@ -13,3 +13,5 @@ app directory contain Flutter app.
 
 2. connect a android device and run **flutter run android** to build app in device.
 
+please set '--no-sound-null-safety' in vscode setting -> flutter run additional args
+
