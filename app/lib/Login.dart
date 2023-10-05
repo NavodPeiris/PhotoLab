@@ -1,4 +1,3 @@
-import './FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './auth.dart';
@@ -75,26 +74,26 @@ class _LoginState extends State<Login> {
                     top: -40,
                     height: 400,
                     width: width,
-                    child: FadeAnimation(1, Container(
+                    child: Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/images/background.png'),
                           fit: BoxFit.fill
                         )
                       ),
-                    )),
+                    )
                   ),
                   Positioned(
                     height: 400,
                     width: width+20,
-                    child: FadeAnimation(1.3, Container(
+                    child: Container(
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/images/background-2.png'),
                           fit: BoxFit.fill
                         )
                       ),
-                    )),
+                    ),
                   )
                 ],
               ),
@@ -104,9 +103,9 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  FadeAnimation(1.5, Text("Login", style: TextStyle(color: Color.fromRGBO(49, 39, 79, 1), fontWeight: FontWeight.bold, fontSize: 30),)),
+                  Text("Login", style: TextStyle(color: Color.fromRGBO(49, 39, 79, 1), fontWeight: FontWeight.bold, fontSize: 30),),
                   SizedBox(height: 30,),
-                  FadeAnimation(1.7, Container(
+                  Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white,
@@ -149,11 +148,11 @@ class _LoginState extends State<Login> {
                         )
                       ],
                     ),
-                  )),
+                  ),
                   SizedBox(height: 20,),
                   //FadeAnimation(1.7, Center(child: Text("Forgot Password?", style: TextStyle(color: Color.fromRGBO(196, 135, 198, 1)),))),
                   SizedBox(height: 30,),
-                  FadeAnimation(1.9, GestureDetector(
+                  GestureDetector(
                     onTap: () async {
                       if(emailController.text != "" && passwordController.text != ""){
                         
@@ -175,15 +174,15 @@ class _LoginState extends State<Login> {
                         child: Text("Login", style: TextStyle(color: Colors.white),),
                       ),
                     )
-                  )),
+                  ),
                   SizedBox(height: 30,),
-                  FadeAnimation(2,GestureDetector( 
+                  GestureDetector( 
                     onTap: () async {  
                       Navigator.pushNamed(context, '/register');
                     },
                     child: Center(child: Text("Create Account", style: TextStyle(color: Color.fromRGBO(49, 39, 79, .6)),)
                   )
-                  )),
+                  ),
                 ],
               ),
             )
