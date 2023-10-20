@@ -12,8 +12,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import './MyCard.dart';
-import 'photoUtil.dart';
+import '../MyCard.dart';
+import '../photoUtil.dart';
 import 'package:wakelock/wakelock.dart';
 
 class ImageGen extends StatefulWidget {
@@ -22,7 +22,6 @@ class ImageGen extends StatefulWidget {
 }
 
 class _ImageGenState extends State<ImageGen> {
-
   final TextEditingController promptController = TextEditingController();
   String? prompt;
   final uploadUrl = Uri.parse('http://192.168.8.141:8000/diffusion/infer');
@@ -32,16 +31,15 @@ class _ImageGenState extends State<ImageGen> {
   PhotoUtil photoUtil = new PhotoUtil();
 
   MyCard card = new MyCard(
-    imagePath: "assets/images/diffusion.png", 
-    text: "generate an image from text"
-  );
+      imagePath: "assets/images/diffusion.png",
+      text: "generate an image from text");
 
   late Uint8List _imageBytes;
 
   @override
   void initState() {
     super.initState();
-    
+
     _uploading = false;
     frameNum = 0;
     photoUtil.workPath = 'images';
@@ -50,54 +48,52 @@ class _ImageGenState extends State<ImageGen> {
   }
 
   Future<void> _uploadText(BuildContext context) async {
-  if (prompt == null) return;
+    if (prompt == null) return;
 
-  try {
-    
-    http.Response response = await http.post(
-      uploadUrl,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'prompt': prompt!,
-      }),
-    );
+    try {
+      http.Response response = await http.post(
+        uploadUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'prompt': prompt!,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final Uint8List imageBytes = response.bodyBytes;
-      setState(() {
-        _imageBytes = imageBytes;
-        _imageUrl = response.headers['image-url'] ?? '';
-      });
-      frameNum++;
-      photoUtil.saveImageFileToDirectory(_imageBytes, 'image_$frameNum.jpg');
-      print('Image uploaded successfully');
-      _showImagePopup(context);
-    } else {
-      print('Image upload failed');
+      if (response.statusCode == 200) {
+        final Uint8List imageBytes = response.bodyBytes;
+        setState(() {
+          _imageBytes = imageBytes;
+          _imageUrl = response.headers['image-url'] ?? '';
+        });
+        frameNum++;
+        photoUtil.saveImageFileToDirectory(_imageBytes, 'image_$frameNum.jpg');
+        print('Image uploaded successfully');
+        _showImagePopup(context);
+      } else {
+        print('Image upload failed');
+        Fluttertoast.showToast(
+            msg: "error",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
       Fluttertoast.showToast(
-        msg: "error",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+          msg: "error",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
-  } catch (e) {
-    print('Error uploading image: $e');
-    Fluttertoast.showToast(
-        msg: "error",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
   }
-}
-
 
   Future<void> _showImagePopup(BuildContext context) async {
     showDialog(
@@ -140,7 +136,6 @@ class _ImageGenState extends State<ImageGen> {
   }
 
   void _saveImageToGallery() async {
-
     final Uint8List? pngBytes = _imageBytes?.buffer.asUint8List();
     //create file
     final String dir = (await getApplicationDocumentsDirectory()).path;
@@ -151,25 +146,22 @@ class _ImageGenState extends State<ImageGen> {
 
     bool? res = await GallerySaver.saveImage(capturedFile.path);
 
-    if(res != null){
+    if (res != null) {
       Fluttertoast.showToast(
-        msg: res ? "Photo Saved" : "Failure!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color.fromARGB(255, 43, 207, 17),
-        textColor: Colors.white,
-        fontSize: 16.0);
+          msg: res ? "Photo Saved" : "Failure!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 43, 207, 17),
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return 
-      Center(
-        child: GestureDetector(
+    return Center(
+      child: GestureDetector(
           child: card,
           onTap: () {
             showDialog(
@@ -186,39 +178,38 @@ class _ImageGenState extends State<ImageGen> {
                             Container(
                               padding: EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.deepPurple))
-                              ),
+                                  border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.deepPurple))),
                               child: TextField(
                                 controller: promptController,
                                 decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "prompt",
-                                  hintStyle: TextStyle(color: Colors.grey[400])
-                                ),
+                                    border: InputBorder.none,
+                                    hintText: "prompt",
+                                    hintStyle:
+                                        TextStyle(color: Colors.grey[400])),
                               ),
                             ),
                             ElevatedButton(
-                              child: Text('Generate'),
-                              onPressed: () async {
+                                child: Text('Generate'),
+                                onPressed: () async {
+                                  prompt = promptController.text;
 
-                                prompt = promptController.text;
+                                  if (!_uploading) {
+                                    setState(() {
+                                      _uploading = true;
+                                    });
 
-                                if(!_uploading){
-                                  setState(() {
-                                    _uploading = true;
-                                  });
+                                    Wakelock.enable();
+                                    await _uploadText(context);
+                                    Wakelock.disable();
 
-                                  Wakelock.enable();
-                                  await _uploadText(context);
-                                  Wakelock.disable();
-
-                                  setState(() {
-                                    _uploading = false;
-                                    prompt = null;
-                                  });
-                                } 
-                              }   
-                            ),
+                                    setState(() {
+                                      _uploading = false;
+                                      prompt = null;
+                                    });
+                                  }
+                                }),
                             _uploading
                                 ? CircularProgressIndicator()
                                 : Container(),
@@ -231,7 +222,6 @@ class _ImageGenState extends State<ImageGen> {
                                 Navigator.of(context).pop();
                               },
                             ),
-
                           ],
                         ),
                       ),
@@ -240,10 +230,7 @@ class _ImageGenState extends State<ImageGen> {
                 );
               },
             );
-          }
-        ),
-      );
+          }),
+    );
   }
-
 }
-

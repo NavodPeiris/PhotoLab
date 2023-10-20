@@ -9,8 +9,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import './MyCard.dart';
-import 'photoUtil.dart';
+import '../MyCard.dart';
+import '../photoUtil.dart';
 import 'package:wakelock/wakelock.dart';
 
 class StyleTransfer extends StatefulWidget {
@@ -30,14 +30,13 @@ class _StyleTransferState extends State<StyleTransfer> {
   late Uint8List _imageBytes;
 
   MyCard card = new MyCard(
-    imagePath: "assets/images/style.png", 
-    text: "transfer style from one image to another"
-  );
+      imagePath: "assets/images/style.png",
+      text: "transfer style from one image to another");
 
   @override
   void initState() {
     super.initState();
-    
+
     _uploading = false;
     frameNum = 0;
     photoUtil.workPath = 'images';
@@ -47,7 +46,6 @@ class _StyleTransferState extends State<StyleTransfer> {
   }
 
   Future<void> _uploadImage(BuildContext context) async {
-
     if (_contentImage == null || _styleImage == null) {
       print('Please select both content and style images');
       return;
@@ -55,9 +53,11 @@ class _StyleTransferState extends State<StyleTransfer> {
 
     try {
       http.MultipartRequest request = http.MultipartRequest('POST', uploadUrl);
-      request.files.add(await http.MultipartFile.fromPath('file1', _contentImage!.path));
-      request.files.add(await http.MultipartFile.fromPath('file2', _styleImage!.path));
-    
+      request.files
+          .add(await http.MultipartFile.fromPath('file1', _contentImage!.path));
+      request.files
+          .add(await http.MultipartFile.fromPath('file2', _styleImage!.path));
+
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
@@ -73,25 +73,25 @@ class _StyleTransferState extends State<StyleTransfer> {
       } else {
         print('Image upload failed');
         Fluttertoast.showToast(
-        msg: "error",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+            msg: "error",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     } catch (e) {
       print('Error uploading image: $e');
       Fluttertoast.showToast(
-        msg: "error",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
-    } 
+          msg: "error",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   Future<void> _showImagePopup(BuildContext context) async {
@@ -135,7 +135,6 @@ class _StyleTransferState extends State<StyleTransfer> {
   }
 
   void _saveImageToGallery() async {
-
     final Uint8List? pngBytes = _imageBytes?.buffer.asUint8List();
     //create file
     final String dir = (await getApplicationDocumentsDirectory()).path;
@@ -146,25 +145,22 @@ class _StyleTransferState extends State<StyleTransfer> {
 
     bool? res = await GallerySaver.saveImage(capturedFile.path);
 
-    if(res != null){
+    if (res != null) {
       Fluttertoast.showToast(
-        msg: res ? "Photo Saved" : "Failure!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color.fromARGB(255, 43, 207, 17),
-        textColor: Colors.white,
-        fontSize: 16.0);
+          msg: res ? "Photo Saved" : "Failure!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 43, 207, 17),
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return 
-      Center(
-        child: GestureDetector(
+    return Center(
+      child: GestureDetector(
           child: card,
           onTap: () {
             showDialog(
@@ -183,22 +179,23 @@ class _StyleTransferState extends State<StyleTransfer> {
                                     margin: EdgeInsets.all(10),
                                     child: Column(
                                       children: [
-                                        Center(child: Text('Content Image'),),
+                                        Center(
+                                          child: Text('Content Image'),
+                                        ),
                                         Image.file(
                                           _contentImage!,
                                           width: 100,
                                           height: 100,
                                         ),
                                       ],
-                                    ) 
-                                  )
+                                    ))
                                 : Text('No content image selected'),
                             ElevatedButton(
                               child: Text('Select Content Image'),
-                              onPressed: ()async{
-                                XFile? selectedImage =
-                                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                                
+                              onPressed: () async {
+                                XFile? selectedImage = await ImagePicker()
+                                    .pickImage(source: ImageSource.gallery);
+
                                 setState(() {
                                   _contentImage = File(selectedImage!.path);
                                 });
@@ -209,47 +206,47 @@ class _StyleTransferState extends State<StyleTransfer> {
                                     margin: EdgeInsets.all(10),
                                     child: Column(
                                       children: [
-                                        Center(child: Text('Style Image'),),
+                                        Center(
+                                          child: Text('Style Image'),
+                                        ),
                                         Image.file(
                                           _styleImage!,
                                           width: 100,
                                           height: 100,
                                         ),
                                       ],
-                                    ) 
-                                  )
+                                    ))
                                 : Text('No style image selected'),
                             ElevatedButton(
                               child: Text('Select Style Image'),
-                              onPressed: ()async{
-                                XFile? selectedImage =
-                                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                                
+                              onPressed: () async {
+                                XFile? selectedImage = await ImagePicker()
+                                    .pickImage(source: ImageSource.gallery);
+
                                 setState(() {
                                   _styleImage = File(selectedImage!.path);
                                 });
                               },
                             ),
                             ElevatedButton(
-                              child: Text('Upload Image'),
-                              onPressed: () async{
-                                if(!_uploading){
-                                  setState(() {
-                                    _uploading = true;
-                                  });
+                                child: Text('Upload Image'),
+                                onPressed: () async {
+                                  if (!_uploading) {
+                                    setState(() {
+                                      _uploading = true;
+                                    });
 
-                                  Wakelock.enable();
-                                  await _uploadImage(context);
-                                  Wakelock.disable;
+                                    Wakelock.enable();
+                                    await _uploadImage(context);
+                                    Wakelock.disable;
 
-                                  setState(() {
-                                    _uploading = false;
-                                    _contentImage = null;
-                                    _styleImage = null;
-                                  });
-                                } 
-                              }   
-                            ),
+                                    setState(() {
+                                      _uploading = false;
+                                      _contentImage = null;
+                                      _styleImage = null;
+                                    });
+                                  }
+                                }),
                             _uploading
                                 ? CircularProgressIndicator()
                                 : Container(),
@@ -262,7 +259,6 @@ class _StyleTransferState extends State<StyleTransfer> {
                                 Navigator.of(context).pop();
                               },
                             ),
-
                           ],
                         ),
                       ),
@@ -271,10 +267,7 @@ class _StyleTransferState extends State<StyleTransfer> {
                 );
               },
             );
-          }
-        ),
-      );
+          }),
+    );
   }
-
 }
-

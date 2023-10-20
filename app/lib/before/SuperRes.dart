@@ -9,8 +9,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import './MyCard.dart';
-import 'photoUtil.dart';
+import '../MyCard.dart';
+import '../photoUtil.dart';
 import 'package:wakelock/wakelock.dart';
 
 class SuperRes extends StatefulWidget {
@@ -27,16 +27,15 @@ class _SuperResState extends State<SuperRes> {
   PhotoUtil photoUtil = new PhotoUtil();
 
   MyCard card = new MyCard(
-    imagePath: "assets/images/super.jpeg", 
-    text: "increase the resolution of image without losing quality"
-  );
+      imagePath: "assets/images/super.jpeg",
+      text: "increase the resolution of image without losing quality");
 
   late Uint8List _imageBytes;
 
   @override
   void initState() {
     super.initState();
-    
+
     _uploading = false;
     frameNum = 0;
     photoUtil.workPath = 'images';
@@ -49,7 +48,8 @@ class _SuperResState extends State<SuperRes> {
 
     try {
       http.MultipartRequest request = http.MultipartRequest('POST', uploadUrl);
-      request.files.add(await http.MultipartFile.fromPath('file', _imageFile!.path));
+      request.files
+          .add(await http.MultipartFile.fromPath('file', _imageFile!.path));
 
       http.StreamedResponse response = await request.send();
 
@@ -65,25 +65,25 @@ class _SuperResState extends State<SuperRes> {
       } else {
         print('Image upload failed');
         Fluttertoast.showToast(
-        msg: "error",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+            msg: "error",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
       }
     } catch (e) {
       print('Error uploading image: $e');
       Fluttertoast.showToast(
-        msg: "error",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
-    } 
+          msg: "error",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
   Future<void> _showImagePopup(BuildContext context) async {
@@ -127,7 +127,6 @@ class _SuperResState extends State<SuperRes> {
   }
 
   void _saveImageToGallery() async {
-
     final Uint8List? pngBytes = _imageBytes?.buffer.asUint8List();
     //create file
     final String dir = (await getApplicationDocumentsDirectory()).path;
@@ -138,25 +137,22 @@ class _SuperResState extends State<SuperRes> {
 
     bool? res = await GallerySaver.saveImage(capturedFile.path);
 
-    if(res != null){
+    if (res != null) {
       Fluttertoast.showToast(
-        msg: res ? "Photo Saved" : "Failure!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Color.fromARGB(255, 43, 207, 17),
-        textColor: Colors.white,
-        fontSize: 16.0);
+          msg: res ? "Photo Saved" : "Failure!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color.fromARGB(255, 43, 207, 17),
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
-    return 
-      Center(
-        child: GestureDetector(
+    return Center(
+      child: GestureDetector(
           child: card,
           onTap: () {
             showDialog(
@@ -174,42 +170,41 @@ class _SuperResState extends State<SuperRes> {
                                 ? Container(
                                     margin: EdgeInsets.all(10),
                                     child: Image.file(
-                                          _imageFile!,
-                                          width: 100,
-                                          height: 100,
-                                        ),
+                                      _imageFile!,
+                                      width: 100,
+                                      height: 100,
+                                    ),
                                   )
                                 : Text('No image selected'),
                             ElevatedButton(
                               child: Text('Select Image'),
-                              onPressed: ()async{
-                                XFile? selectedImage =
-                                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                                
+                              onPressed: () async {
+                                XFile? selectedImage = await ImagePicker()
+                                    .pickImage(source: ImageSource.gallery);
+
                                 setState(() {
                                   _imageFile = File(selectedImage!.path);
                                 });
                               },
                             ),
                             ElevatedButton(
-                              child: Text('Upload Image'),
-                              onPressed: () async{
-                                if(!_uploading){
-                                  setState(() {
-                                    _uploading = true;
-                                  });
+                                child: Text('Upload Image'),
+                                onPressed: () async {
+                                  if (!_uploading) {
+                                    setState(() {
+                                      _uploading = true;
+                                    });
 
-                                  Wakelock.enable();
-                                  await _uploadImage(context);
-                                  Wakelock.disable;
+                                    Wakelock.enable();
+                                    await _uploadImage(context);
+                                    Wakelock.disable;
 
-                                  setState(() {
-                                    _uploading = false;
-                                    _imageFile = null;
-                                  });
-                                } 
-                              }   
-                            ),
+                                    setState(() {
+                                      _uploading = false;
+                                      _imageFile = null;
+                                    });
+                                  }
+                                }),
                             _uploading
                                 ? CircularProgressIndicator()
                                 : Container(),
@@ -222,7 +217,6 @@ class _SuperResState extends State<SuperRes> {
                                 Navigator.of(context).pop();
                               },
                             ),
-
                           ],
                         ),
                       ),
@@ -231,10 +225,7 @@ class _SuperResState extends State<SuperRes> {
                 );
               },
             );
-          }
-        ),
-      );
+          }),
+    );
   }
-
 }
-
