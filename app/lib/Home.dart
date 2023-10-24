@@ -14,8 +14,8 @@ import 'photoUtil.dart';
 
 //import './SuperRes.dart';
 //import './Deoldify.dart';
-import './StyleTransfer.dart';
-import './ImageGen.dart';
+import 'before/StyleTransfer.dart';
+import 'before/ImageGen.dart';
 import './account.dart';
 
 import 'superResolution.dart';
