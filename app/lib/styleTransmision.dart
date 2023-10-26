@@ -15,18 +15,17 @@ import 'package:wakelock/wakelock.dart';
 
 const themeColor = Color.fromARGB(255, 151, 16, 255);
 
-class Deoldify extends StatefulWidget {
-  const Deoldify({Key? key}) : super(key: key);
+class StyleTransmision extends StatefulWidget {
+  const StyleTransmision({Key? key}) : super(key: key);
 
   @override
   _SuperResState createState() => _SuperResState();
 }
 
-class _SuperResState extends State<Deoldify> {
-  final ImagePicker _picker = ImagePicker();
-  List<XFile>? _files;
-  XFile? _imageFile;
-  final uploadUrl = Uri.parse('http://192.168.8.141:8000/deoldify/infer');
+class _SuperResState extends State<StyleTransmision> {
+  XFile? _contentImage;
+  XFile? _styleImage;
+  final uploadUrl = Uri.parse('http://192.168.8.141:8000/styleTransfer/infer');
   String? _imageUrl;
   late bool _uploading;
   late int frameNum;
@@ -34,7 +33,7 @@ class _SuperResState extends State<Deoldify> {
 
   late Uint8List _imageBytes;
 
-   @override
+  @override
   void initState() {
     super.initState();
 
@@ -42,17 +41,22 @@ class _SuperResState extends State<Deoldify> {
     frameNum = 0;
     photoUtil.workPath = 'images';
     photoUtil.getAppTempDirectory();
-    _imageFile = null;
+    _contentImage = null;
+    _styleImage = null;
   }
 
   Future<void> _uploadImage(BuildContext context) async {
-
-    if (_imageFile == null) return;
+    if (_contentImage == null || _styleImage == null) {
+      print('Please select both content and style images');
+      return;
+    }
 
     try {
       http.MultipartRequest request = http.MultipartRequest('POST', uploadUrl);
       request.files
-          .add(await http.MultipartFile.fromPath('file', _imageFile!.path));
+          .add(await http.MultipartFile.fromPath('file1', _contentImage!.path));
+      request.files
+          .add(await http.MultipartFile.fromPath('file2', _styleImage!.path));
 
       http.StreamedResponse response = await request.send();
 
@@ -64,6 +68,7 @@ class _SuperResState extends State<Deoldify> {
         });
         frameNum++;
         photoUtil.saveImageFileToDirectory(_imageBytes, 'image_$frameNum.jpg');
+        print('Image uploaded successfully');
         _showImagePopup(context);
       } else {
         print('Image upload failed');
@@ -94,7 +99,7 @@ class _SuperResState extends State<Deoldify> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Colorized Image'),
+          title: Text('Style Transfered Image'),
           content: Container(
             child: _imageBytes != null
                 ? Image.memory(
@@ -155,7 +160,7 @@ class _SuperResState extends State<Deoldify> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.purple,
+          backgroundColor: Color.fromARGB(255, 43, 207, 17),
           textColor: Colors.white,
           fontSize: 16.0);
     }
@@ -166,7 +171,7 @@ class _SuperResState extends State<Deoldify> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            "Deoldify",
+            "Style Transfer",
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 20,
@@ -188,7 +193,7 @@ class _SuperResState extends State<Deoldify> {
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
                   width: double.infinity,
-                  height: 300,
+                  height: 200,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: themeColor, // Border color
@@ -206,14 +211,14 @@ class _SuperResState extends State<Deoldify> {
                       ],
                     ),
                   ),
-                  child: _imageFile != null
+                  child: _contentImage != null
                       ? Image.file(
-                          File(_imageFile!.path),
+                          File(_contentImage!.path),
                           fit: BoxFit.cover,
                         )
                       : const Center(
                           child: Text(
-                            'Not Picked',
+                            'Select Content Image',
                             style: TextStyle(
                               fontSize: 20,
                               color: Color.fromARGB(255, 43, 41,
@@ -229,9 +234,10 @@ class _SuperResState extends State<Deoldify> {
                 // Changed to an ElevatedButton for a more prominent appearance
                 onPressed: () async {
                   final XFile? photo =
-                      await _picker.pickImage(source: ImageSource.gallery);
+                      await ImagePicker().pickImage(source: ImageSource.gallery);
+
                   setState(() {
-                    _imageFile = photo;
+                    _contentImage = photo;
                   });
                 },
                 style: ElevatedButton.styleFrom(
@@ -241,7 +247,64 @@ class _SuperResState extends State<Deoldify> {
                 child: const Text('Pick Image',
                     style: TextStyle(color: Colors.white)),
               ),
-              
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  width: double.infinity,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: themeColor, // Border color
+                      width: 2.0, // Border width
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        Color.fromARGB(
+                            255, 243, 221, 247), // Start with your theme color
+                        Colors
+                            .white, // Add a transparent color for the "charm" effect
+                      ],
+                    ),
+                  ),
+                  child: _styleImage != null
+                      ? Image.file(
+                          File(_styleImage!.path),
+                          fit: BoxFit.cover,
+                        )
+                      : const Center(
+                          child: Text(
+                            'Select Style Image',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 43, 41,
+                                  41), // Set the text color to white
+                              fontWeight: FontWeight.bold, // Make the text bold
+                            ),
+                          ),
+                        ),
+                ),
+              ),
+              //Single Image
+              ElevatedButton(
+                // Changed to an ElevatedButton for a more prominent appearance
+                onPressed: () async {
+                  final XFile? photo =
+                      await ImagePicker().pickImage(source: ImageSource.gallery);
+
+                  setState(() {
+                    _styleImage = photo;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      themeColor, // Use themeColor as the button color
+                ),
+                child: const Text('Pick Image',
+                    style: TextStyle(color: Colors.white)),
+              ),
               ElevatedButton(
                   // Changed to an ElevatedButton for a more prominent appearance
                   onPressed: () async {
@@ -256,7 +319,8 @@ class _SuperResState extends State<Deoldify> {
 
                       setState(() {
                         _uploading = false;
-                        _imageFile = null;
+                        _contentImage = null;
+                        _styleImage = null;
                       });
                     }
                   },

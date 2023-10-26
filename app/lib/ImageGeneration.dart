@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:app/account.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'photoUtil.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
@@ -12,26 +11,26 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wakelock/wakelock.dart';
+import 'photoUtil.dart';
+import 'dart:convert';
 
 const themeColor = Color.fromARGB(255, 151, 16, 255);
 
-class Deoldify extends StatefulWidget {
-  const Deoldify({Key? key}) : super(key: key);
+class ImageGeneration extends StatefulWidget {
+  const ImageGeneration({Key? key}) : super(key: key);
 
   @override
   _SuperResState createState() => _SuperResState();
 }
 
-class _SuperResState extends State<Deoldify> {
-  final ImagePicker _picker = ImagePicker();
-  List<XFile>? _files;
-  XFile? _imageFile;
-  final uploadUrl = Uri.parse('http://192.168.8.141:8000/deoldify/infer');
+class _SuperResState extends State<ImageGeneration> {
+  final TextEditingController promptController = TextEditingController();
+  String? prompt;
+  final uploadUrl = Uri.parse('http://192.168.8.141:8000/diffusion/infer');
   String? _imageUrl;
   late bool _uploading;
   late int frameNum;
   PhotoUtil photoUtil = new PhotoUtil();
-
   late Uint8List _imageBytes;
 
    @override
@@ -42,28 +41,32 @@ class _SuperResState extends State<Deoldify> {
     frameNum = 0;
     photoUtil.workPath = 'images';
     photoUtil.getAppTempDirectory();
-    _imageFile = null;
+    prompt = null;
   }
 
-  Future<void> _uploadImage(BuildContext context) async {
-
-    if (_imageFile == null) return;
+  Future<void> _uploadText(BuildContext context) async {
+    if (prompt == null) return;
 
     try {
-      http.MultipartRequest request = http.MultipartRequest('POST', uploadUrl);
-      request.files
-          .add(await http.MultipartFile.fromPath('file', _imageFile!.path));
-
-      http.StreamedResponse response = await request.send();
+      http.Response response = await http.post(
+        uploadUrl,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'prompt': prompt!,
+        }),
+      );
 
       if (response.statusCode == 200) {
-        final Uint8List imageBytes = await response.stream.toBytes();
+        final Uint8List imageBytes = response.bodyBytes;
         setState(() {
           _imageBytes = imageBytes;
           _imageUrl = response.headers['image-url'] ?? '';
         });
         frameNum++;
         photoUtil.saveImageFileToDirectory(_imageBytes, 'image_$frameNum.jpg');
+        print('Image uploaded successfully');
         _showImagePopup(context);
       } else {
         print('Image upload failed');
@@ -94,7 +97,7 @@ class _SuperResState extends State<Deoldify> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Colorized Image'),
+          title: Text('Generated Image'),
           content: Container(
             child: _imageBytes != null
                 ? Image.memory(
@@ -155,7 +158,7 @@ class _SuperResState extends State<Deoldify> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.purple,
+          backgroundColor: Color.fromARGB(255, 43, 207, 17),
           textColor: Colors.white,
           fontSize: 16.0);
     }
@@ -166,7 +169,7 @@ class _SuperResState extends State<Deoldify> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            "Deoldify",
+            "Image Generation",
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 20,
@@ -186,90 +189,51 @@ class _SuperResState extends State<Deoldify> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(30.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 300,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: themeColor, // Border color
-                      width: 2.0, // Border width
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                      colors: [
-                        Color.fromARGB(
-                            255, 243, 221, 247), // Start with your theme color
-                        Colors
-                            .white, // Add a transparent color for the "charm" effect
-                      ],
-                    ),
-                  ),
-                  child: _imageFile != null
-                      ? Image.file(
-                          File(_imageFile!.path),
-                          fit: BoxFit.cover,
-                        )
-                      : const Center(
-                          child: Text(
-                            'Not Picked',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Color.fromARGB(255, 43, 41,
-                                  41), // Set the text color to white
-                              fontWeight: FontWeight.bold, // Make the text bold
-                            ),
-                          ),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: promptController,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Prompt',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(color: themeColor, width: 2.0),
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (!_uploading) {
+
+                          prompt = promptController.text;
+
+                          setState(() {
+                            _uploading = true;
+                          });
+
+                          Wakelock.enable();
+                          await _uploadText(context);
+                          Wakelock.disable();
+
+                          setState(() {
+                            _uploading = false;
+                            prompt = null;
+                          });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: themeColor,
+                      ),
+                      child: const Text('Generate',
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                    _uploading
+                                ? CircularProgressIndicator()
+                                : Container(),
+                  ],
                 ),
               ),
-              //Single Image
-              ElevatedButton(
-                // Changed to an ElevatedButton for a more prominent appearance
-                onPressed: () async {
-                  final XFile? photo =
-                      await _picker.pickImage(source: ImageSource.gallery);
-                  setState(() {
-                    _imageFile = photo;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      themeColor, // Use themeColor as the button color
-                ),
-                child: const Text('Pick Image',
-                    style: TextStyle(color: Colors.white)),
-              ),
-              
-              ElevatedButton(
-                  // Changed to an ElevatedButton for a more prominent appearance
-                  onPressed: () async {
-                    if (!_uploading) {
-                      setState(() {
-                        _uploading = true;
-                      });
-
-                      Wakelock.enable();
-                      await _uploadImage(context);
-                      Wakelock.disable;
-
-                      setState(() {
-                        _uploading = false;
-                        _imageFile = null;
-                      });
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        themeColor, // Use themeColor as the button color
-                  ),
-                  child: const Text('Upload Image',
-                      style: TextStyle(color: Colors.white)),
-                ),
-                _uploading
-                        ? CircularProgressIndicator()
-                        : Container(),
             ],
           ),
         ));

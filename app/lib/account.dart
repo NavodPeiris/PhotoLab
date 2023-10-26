@@ -15,49 +15,52 @@ class _AccountState extends State<Account> {
     return Container(
       child: Center(
         child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            customButton: const Icon(
-              Icons.account_circle,
-              size: 46,
-              color: Colors.white,
-            ),
-            items: [
-              ...MenuItems.firstItems.map(
-                        (item) => DropdownMenuItem<MenuItem>(
-                  value: item,
-                  child: MenuItems.buildItem(item),
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: DropdownButton2(
+              customButton: const Icon(
+                Icons.account_circle,
+                size: 36,
+                color: Colors.black,
+              ),
+              items: [
+                ...MenuItems.firstItems.map(
+                  (item) => DropdownMenuItem<MenuItem>(
+                    value: item,
+                    child: MenuItems.buildItem(item),
+                  ),
                 ),
-              ),
-              const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
-              ...MenuItems.secondItems.map(
-                        (item) => DropdownMenuItem<MenuItem>(
-                  value: item,
-                  child: MenuItems.buildItem(item),
+                const DropdownMenuItem<Divider>(
+                    enabled: false, child: Divider()),
+                ...MenuItems.secondItems.map(
+                  (item) => DropdownMenuItem<MenuItem>(
+                    value: item,
+                    child: MenuItems.buildItem(item),
+                  ),
                 ),
-              ),
-            ],
-            onChanged: (value) {
-              MenuItems.onChanged(context, value as MenuItem);
-            },
-            dropdownStyleData: DropdownStyleData(
-              width: 160,
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: Colors.purple[200],
-              ),
-              elevation: 8,
-              offset: const Offset(0, 8),
-            ),
-            menuItemStyleData: MenuItemStyleData(
-              customHeights: [
-                ...List<double>.filled(MenuItems.firstItems.length, 48),
-                8,
-                ...List<double>.filled(MenuItems.secondItems.length, 48),
               ],
-              padding: const EdgeInsets.only(left: 16, right: 16),
+              onChanged: (value) {
+                MenuItems.onChanged(context, value as MenuItem);
+              },
+              dropdownStyleData: DropdownStyleData(
+                width: 160,
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Color.fromARGB(255, 151, 16, 255),
+                ),
+                elevation: 8,
+                offset: const Offset(0, 8),
+              ),
+              menuItemStyleData: MenuItemStyleData(
+                customHeights: [
+                  ...List<double>.filled(MenuItems.firstItems.length, 48),
+                  8,
+                  ...List<double>.filled(MenuItems.secondItems.length, 48),
+                ],
+                padding: const EdgeInsets.only(left: 16, right: 16),
+              ),
             ),
-            
           ),
         ),
       ),
@@ -102,9 +105,9 @@ class MenuItems {
   }
 
   static onChanged(BuildContext context, MenuItem item) {
-    switch (item) { 
+    switch (item) {
       case MenuItems.settings:
-      //Do something
+        //Do something
         break;
       case MenuItems.logout:
         Auth().signOut();
