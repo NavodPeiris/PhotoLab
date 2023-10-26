@@ -12,15 +12,11 @@ import 'package:http/http.dart' as http;
 
 import 'photoUtil.dart';
 
-//import './SuperRes.dart';
-//import './Deoldify.dart';
-import 'before/StyleTransfer.dart';
-import 'before/ImageGen.dart';
 import './account.dart';
 
 import 'superResolution.dart';
 import 'styleTransmision.dart';
-import 'Deoldify copy.dart';
+import 'Deoldify.dart';
 import 'ImageGeneration.dart';
 
 /*
@@ -154,7 +150,7 @@ class _HomeState extends State<Home> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                              'Super Resolution \nStyle transmision \nDeoldify \nImage generation', // Replace with your text
+                              'Super Resolution \nStyle transfer \nDeoldify \nImage generation', // Replace with your text
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 color: Colors.white, //    Set the text color
@@ -195,7 +191,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(10),
                       image: const DecorationImage(
                         image: AssetImage(
-                            'assets/images/11.png'), // Replace with the path to your image asset
+                            'assets/images/super.jpeg'), // Replace with the path to your image asset
                         fit: BoxFit.fill, // You can adjust the BoxFit as needed
                       ),
                     ),
@@ -243,14 +239,14 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(10),
                       image: const DecorationImage(
                         image: AssetImage(
-                            'assets/images/22.jpeg'), // Replace with the path to your image asset
+                            'assets/images/style.png'), // Replace with the path to your image asset
                         fit: BoxFit
                             .fitWidth, // You can adjust the BoxFit as needed
                       ),
                     ),
                     child: const Padding(
                       padding: EdgeInsets.only(top: 120.0),
-                      child: Text('Style Transmision', // Replace with your text
+                      child: Text('Style Transfer', // Replace with your text
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white, //    Set the text color
@@ -297,7 +293,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(10),
                       image: const DecorationImage(
                         image: AssetImage(
-                            'assets/images/33.jpg'), // Replace with the path to your image asset
+                            'assets/images/deoldify.jpeg'), // Replace with the path to your image asset
                         fit: BoxFit
                             .fitWidth, // You can adjust the BoxFit as needed
                       ),
@@ -346,7 +342,7 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(10),
                       image: const DecorationImage(
                         image: AssetImage(
-                            'assets/images/44.jpeg'), // Replace with the path to your image asset
+                            'assets/images/diffusion.jpeg'), // Replace with the path to your image asset
                         fit: BoxFit
                             .fitWidth, // You can adjust the BoxFit as needed
                       ),

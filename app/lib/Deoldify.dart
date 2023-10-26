@@ -15,25 +15,26 @@ import 'package:wakelock/wakelock.dart';
 
 const themeColor = Color.fromARGB(255, 151, 16, 255);
 
-class SuperRes extends StatefulWidget {
-  const SuperRes({Key? key}) : super(key: key);
+class Deoldify extends StatefulWidget {
+  const Deoldify({Key? key}) : super(key: key);
 
   @override
   _SuperResState createState() => _SuperResState();
 }
 
-class _SuperResState extends State<SuperRes> {
+class _SuperResState extends State<Deoldify> {
   final ImagePicker _picker = ImagePicker();
-  XFile? _imageFile;
   List<XFile>? _files;
-  final uploadUrl = Uri.parse('http://192.168.8.141:8000/superRes/infer');
+  XFile? _imageFile;
+  final uploadUrl = Uri.parse('http://192.168.8.141:8000/deoldify/infer');
   String? _imageUrl;
   late bool _uploading;
   late int frameNum;
-  late Uint8List _imageBytes;
   PhotoUtil photoUtil = new PhotoUtil();
 
-  @override
+  late Uint8List _imageBytes;
+
+   @override
   void initState() {
     super.initState();
 
@@ -45,6 +46,7 @@ class _SuperResState extends State<SuperRes> {
   }
 
   Future<void> _uploadImage(BuildContext context) async {
+
     if (_imageFile == null) return;
 
     try {
@@ -92,7 +94,7 @@ class _SuperResState extends State<SuperRes> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('High Resolution Image'),
+          title: Text('Colorized Image'),
           content: Container(
             child: _imageBytes != null
                 ? Image.memory(
@@ -162,88 +164,85 @@ class _SuperResState extends State<SuperRes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Super Resolution",
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Colors.black,
+        appBar: AppBar(
+          title: const Text(
+            "Deoldify",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+              color: Colors.black,
+            ),
           ),
+          backgroundColor: Colors.white,
+          shadowColor: Colors.purple,
+          iconTheme: const IconThemeData(color: Colors.black),
+          actions: const [
+            Account(),
+          ],
         ),
-        backgroundColor: Colors.white,
-        shadowColor: Colors.purple,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: const [
-          Account(),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(30.0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: themeColor, // Border color
-                        width: 2.0, // Border width
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: const LinearGradient(
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        colors: [
-                          Color.fromARGB(255, 243, 221,
-                              247), // Start with your theme color
-                          Colors
-                              .white, // Add a transparent color for the "charm" effect
-                        ],
-                      ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  width: double.infinity,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: themeColor, // Border color
+                      width: 2.0, // Border width
                     ),
-                    child: _imageFile != null
-                        ? Image.file(
-                            File(_imageFile!.path),
-                            fit: BoxFit.cover,
-                          )
-                        : const Center(
-                            child: Text(
-                              'Not Picked',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Color.fromARGB(255, 43, 41,
-                                    41), // Set the text color to white
-                                fontWeight:
-                                    FontWeight.bold, // Make the text bold
-                              ),
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      colors: [
+                        Color.fromARGB(
+                            255, 243, 221, 247), // Start with your theme color
+                        Colors
+                            .white, // Add a transparent color for the "charm" effect
+                      ],
+                    ),
+                  ),
+                  child: _imageFile != null
+                      ? Image.file(
+                          File(_imageFile!.path),
+                          fit: BoxFit.cover,
+                        )
+                      : const Center(
+                          child: Text(
+                            'Not Picked',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 43, 41,
+                                  41), // Set the text color to white
+                              fontWeight: FontWeight.bold, // Make the text bold
                             ),
                           ),
-                  ),
+                        ),
                 ),
-                //Single Image
-                ElevatedButton(
-                  // Changed to an ElevatedButton for a more prominent appearance
-                  onPressed: () async {
-                    final XFile? photo =
-                        await _picker.pickImage(source: ImageSource.gallery);
-                    setState(() {
-                      _imageFile = photo;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        themeColor, // Use themeColor as the button color
-                  ),
-                  child: const Text('Pick Image',
-                      style: TextStyle(color: Colors.white)),
+              ),
+              //Single Image
+              ElevatedButton(
+                // Changed to an ElevatedButton for a more prominent appearance
+                onPressed: () async {
+                  final XFile? photo =
+                      await _picker.pickImage(source: ImageSource.gallery);
+                  setState(() {
+                    _imageFile = photo;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      themeColor, // Use themeColor as the button color
                 ),
-                
-                ElevatedButton(
+                child: const Text('Pick Image',
+                    style: TextStyle(color: Colors.white)),
+              ),
+              
+              ElevatedButton(
                   // Changed to an ElevatedButton for a more prominent appearance
                   onPressed: () async {
                     if (!_uploading) {
@@ -271,19 +270,8 @@ class _SuperResState extends State<SuperRes> {
                 _uploading
                         ? CircularProgressIndicator()
                         : Container(),
-              ],
-            ),
+            ],
           ),
-          /*Container(
-            height: 10,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 151, 16, 255),
-              borderRadius: BorderRadius.circular(0),
-            ),
-          ),*/
-        ],
-      ),
-    );
+        ));
   }
 }
